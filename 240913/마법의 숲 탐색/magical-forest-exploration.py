@@ -5,15 +5,22 @@ input = lambda:sys.stdin.readline().rstrip()
 
 r, c, k = map(int, input().split())
 
-
 graph = []
-graph.append([True] * (c + 2))
-for i in range(r):
-    graph.append([False] + [True] * c + [False])
-graph.append([False] * (c + 2))
+graph2 = []
+dirs = []
 
-graph2 = [[-1] * (c + 2) for _ in range(r + 2)]
-dirs = [[] for _ in range(k)]
+def reset():
+    global graph, graph2, dirs
+    graph = []
+    graph.append([True] * (c + 2))
+    for i in range(r):
+        graph.append([False] + [True] * c + [False])
+    graph.append([False] * (c + 2))
+
+    graph2 = [[-1] * (c + 2) for _ in range(r + 2)]
+    dirs = [[] for _ in range(k)]
+
+reset()
 
 dir = {0:[-1, 0], 1:[0, 1], 2:[1, 0], 3:[0, -1]}
 m_type = {0: 0, 1: -1, 2: 1, 3: 0}
@@ -68,14 +75,7 @@ for i in range(k):
         dirs[i] = [x + dir[d][0], y + dir[d][1]]
         if m == 3 or x == r - 1:
             if x < 2:
-                graph = []
-                graph.append([True] * (c + 2))
-                for i in range(r):
-                    graph.append([False] + [True] * c + [False])
-                graph.append([False] * (c + 2))
-
-                graph2 = [[-1] * (c + 2) for _ in range(r + 2)]
-                dirs = [[] for _ in range(k)]
+                reset()
                 break
             graph[x][y] = False
             graph2[x][y] = i
