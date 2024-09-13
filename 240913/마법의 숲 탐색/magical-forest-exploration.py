@@ -28,7 +28,6 @@ dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
 def move_golem(x, y):
-    global graph
     if x < 0:
         if graph[x + 2][y]:
             return [x + 1, y, 0]
