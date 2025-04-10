@@ -47,7 +47,7 @@ class Node():
     def set_subtree(self):
         self.subtree += 1
 
-tree = [[] for _ in range(100000)]
+tree = [[] for _ in range(100001)]
 
 
 def dfs(x, color):
@@ -55,13 +55,6 @@ def dfs(x, color):
     for sub in tree[x][1:]:
         dfs(sub.id, color)
 
-
-'''
-5(4): 19(3), 10(2): 1(1), 9(1) : 4(2) : 14(1)
-2(1)
-16(1)
-
-'''
 answer = 0
 
 def score(x, cnt):
@@ -108,6 +101,7 @@ for _ in range(q):
                     while True:
                         if depth + 1 > now.depth:
                             now.depth += 1
+                        else: break
                         if now.p_id == -1:
                             break
                         now = tree[now.p_id][0]
