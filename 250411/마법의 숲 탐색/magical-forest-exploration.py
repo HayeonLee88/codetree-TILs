@@ -1,5 +1,4 @@
 from collections import deque
-
 r, c, k = map(int, input().split())
 graph = []
 
@@ -40,12 +39,11 @@ def move_golrem(x, y, dir):
 def move_fairy(x, y):
     global visited
     q = deque()
-    q.append((x, y))
+    q.append((x, y, False))
     visited[x][y] = True
     answer = x - 2
-    check = False
     while q:
-        x, y = q.popleft()
+        x, y, check = q.popleft()
         now = graph[x][y]
         if now == -2:
             for i in range(4):
@@ -56,8 +54,7 @@ def move_fairy(x, y):
                         if graph[nx][ny] != 0:
                             answer = max(nx - 2, answer)
                             visited[nx][ny] = True
-                            q.append((nx, ny))
-                            check = True
+                            q.append((nx, ny, True))
         else:               
             for i in range(4):
                 nx = x + dx[i]
@@ -65,11 +62,10 @@ def move_fairy(x, y):
                 if 0 < nx < r + 3 and 0 < ny < c + 1: 
                     if not visited[nx][ny]:
                         if graph[nx][ny] == -2:
-                            q.append((nx, ny))
+                            q.append((nx, ny, True))
                         elif graph[nx][ny] == now:
                             if check:
-                                check = False
-                                q.append((nx, ny))
+                                q.append((nx, ny, False))
                         else:
                             continue
                         answer = max(nx - 2, answer)
@@ -103,8 +99,8 @@ for i in range(k):
             graph[r_i + dx[j]][c_i + dy[j]] = i + 1
         visited = [[False] * (c + 2) for _ in range(r + 3)]
         exit.append([r_i, c_i, d_i])
-        answer += move_fairy(r_i, c_i)
-
+        tmp = move_fairy(r_i, c_i)
+        answer += tmp
     else:
         new_map()
 
