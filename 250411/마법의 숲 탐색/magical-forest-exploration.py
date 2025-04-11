@@ -39,42 +39,36 @@ def move_golrem(x, y, dir):
 def move_fairy(x, y):
     global visited
     q = deque()
-    q.append((x, y))
+    q.append((x, y, False))
     visited[x][y] = True
     answer = x - 2
     while q:
-        x, y = q.popleft()
+        x, y, check = q.popleft()
         now = graph[x][y]
-        if now == -2:
+        if now < 0:
             for i in range(4):
                 nx = x + dx[i]
                 ny = y + dy[i]
                 if 0 < nx < r + 3 and 0 < ny < c + 1: 
                     if not visited[nx][ny]:
                         if graph[nx][ny] != 0:
+                            if graph[nx][ny] != -now:
+                                check = True
                             answer = max(nx - 2, answer)
                             visited[nx][ny] = True
-                            # 중앙으로 이동
-                            for i in range(4):
-                                tx = nx + dx[i]
-                                ty = ny + dy[i]
-                                if 0 < tx < r + 3 and 0 < ty < c + 1: 
-                                    if not visited[tx][ty]:
-                                        if graph[nx][ny] == graph[tx][ty]:
-                                            answer = max(tx - 2, answer)
-                                            visited[tx][ty] = True
-                                            q.append((tx, ty))
-                                            break
+                            q.append((nx, ny, check))
         else:               
             for i in range(4):
                 nx = x + dx[i]
                 ny = y + dy[i]
                 if 0 < nx < r + 3 and 0 < ny < c + 1: 
                     if not visited[nx][ny]:
-                        if graph[nx][ny] == -2:
-                            q.append((nx, ny))
-                        elif graph[nx][ny] == now:
-                            pass
+                        if graph[nx][ny] == -now:
+                            q.append((nx, ny, check))
+                        elif graph[nx][ny] == now:                           
+                            if check:
+                                check = False
+                                q.append((nx, ny,check))
                         else:
                             continue
                         answer = max(nx - 2, answer)
@@ -103,7 +97,7 @@ for i in range(k):
         # 골렘이 멈춘 위치 표시하기
         for j in range(5):
             if d_i == j: # 출구
-                graph[r_i + dx[j]][c_i + dy[j]] = -2
+                graph[r_i + dx[j]][c_i + dy[j]] = -(i + 1)
                 continue
             graph[r_i + dx[j]][c_i + dy[j]] = i + 1
         visited = [[False] * (c + 2) for _ in range(r + 3)]
