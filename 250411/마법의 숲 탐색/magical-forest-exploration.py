@@ -39,11 +39,11 @@ def move_golrem(x, y, dir):
 def move_fairy(x, y):
     global visited
     q = deque()
-    q.append((x, y, False))
+    q.append((x, y))
     visited[x][y] = True
     answer = x - 2
     while q:
-        x, y, check = q.popleft()
+        x, y = q.popleft()
         now = graph[x][y]
         if now == -2:
             for i in range(4):
@@ -54,7 +54,11 @@ def move_fairy(x, y):
                         if graph[nx][ny] != 0:
                             answer = max(nx - 2, answer)
                             visited[nx][ny] = True
-                            q.append((nx, ny, True))
+                            nx += dx[i]
+                            ny += dy[i]
+                            answer = max(nx - 2, answer)
+                            visited[nx][ny] = True
+                            q.append((nx, ny))
         else:               
             for i in range(4):
                 nx = x + dx[i]
@@ -62,10 +66,9 @@ def move_fairy(x, y):
                 if 0 < nx < r + 3 and 0 < ny < c + 1: 
                     if not visited[nx][ny]:
                         if graph[nx][ny] == -2:
-                            q.append((nx, ny, True))
+                            q.append((nx, ny))
                         elif graph[nx][ny] == now:
-                            if check:
-                                q.append((nx, ny, False))
+                            pass
                         else:
                             continue
                         answer = max(nx - 2, answer)
