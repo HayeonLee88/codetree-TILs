@@ -54,11 +54,17 @@ def move_fairy(x, y):
                         if graph[nx][ny] != 0:
                             answer = max(nx - 2, answer)
                             visited[nx][ny] = True
-                            nx += dx[i]
-                            ny += dy[i]
-                            answer = max(nx - 2, answer)
-                            visited[nx][ny] = True
-                            q.append((nx, ny))
+                            # 중앙으로 이동
+                            for i in range(4):
+                                tx = nx + dx[i]
+                                ty = ny + dy[i]
+                                if 0 < tx < r + 3 and 0 < ty < c + 1: 
+                                    if not visited[tx][ty]:
+                                        if graph[nx][ny] == graph[tx][ty]:
+                                            answer = max(tx - 2, answer)
+                                            visited[tx][ty] = True
+                                            q.append((tx, ty))
+                                            break
         else:               
             for i in range(4):
                 nx = x + dx[i]
