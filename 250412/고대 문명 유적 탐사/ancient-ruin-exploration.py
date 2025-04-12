@@ -5,7 +5,7 @@ graph = [list(map(int, input().split())) for _ in range(5)]
 wall = deque(map(int, input().split()))
 
 visited = [[False] * 5 for _ in range(5)]
-points = [[1, 1], [2, 1], [3, 1], [1, 2], [2, 2], [2, 3], [1, 3], [2, 3], [3, 3]]
+points = [[1, 1], [1, 2], [1, 3], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3]]
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
@@ -24,7 +24,7 @@ def rotate_270(x):
     x = list(zip(*x))[::-1]
     return x
 
-def bfs1(x, y, map1):
+def bfs1(x, y, map1, visited):
     set_ = set()
     q = deque()
     q.append((x, y))
@@ -115,7 +115,8 @@ for i in range(K):
             tmp = 0
             for k in range(5):
                 for l in range(5):
-                    tmp += bfs1(k, l, tmp_g)
+                    visited[k][l] = True
+                    tmp += bfs1(k, l, tmp_g, visited)
             if max_ < tmp:
                 max_ = tmp
                 p = [num, [x, y]]
@@ -137,3 +138,4 @@ for i in range(K):
             graph[k][l] = sub[k + 1 - x][l + 1 - y]
     chain_gems(graph)
     print(answer, end=' ')
+    
