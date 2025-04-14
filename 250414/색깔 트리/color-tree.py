@@ -4,15 +4,15 @@ input = lambda:sys.stdin.readline().rstrip()
 
 q = int(input())
 
-# 트리의 노드
+
 class Node():
-		'''
-		id: 노드 id
-		p_id: 노드의 부모 id
-		color: 노드의 색
-		max_d: 노드의 서브트리가 가질 수 있는 최대 깊이
-		depth: 노드의 현재 깊이
-		'''
+    '''
+	id: 노드 id
+	p_id: 노드의 부모 id
+	color: 노드의 색
+	max_d: 노드의 서브트리가 가질 수 있는 최대 깊이
+	depth: 노드의 현재 깊이
+	'''
     def __init__(self, id, p_id, color, max_d):
         self.id = id
         self.p_id = p_id
@@ -20,27 +20,31 @@ class Node():
         self.max_d = max_d
         self.depth = 1
 
+    def set_color(self,color):
+        self.color = color
+
+    def set_subtree(self):
+        self.subtree += 1
+
 tree = [[] for _ in range(100001)]
 
 
-# 모든 서브트리의 색 바꾸기
 def dfs(x, color):
-		'''
-		x: 색을 바꿀 Node의 id
-		color: 새로 바꿀 색
-		'''
+    '''
+	x: 색을 바꿀 Node의 id
+	color: 새로 바꿀 색
+	'''
     tree[x][0].color = color
     for sub in tree[x][1:]:
         dfs(sub.id, color)
 
 answer = 0
 
-# 각 노드의 서브트리 색 종류에 따른 점수 합 구하기
 def score(x, cnt):
-		'''
-		x: 서브트리의 점수를 구할 Node의 id
-		cnt: 서브트리의 색 종류 가지수
-		'''
+    '''
+	x: 서브트리의 점수를 구할 Node의 id
+	cnt: 서브트리의 색 종류 가지수
+	'''
     global answer
     cnt.add(tree[x][0].color)
     if len(tree[x]) == 1:
@@ -62,7 +66,7 @@ for _ in range(q):
     if cmd == 100:
         _, m_id, p_id, color, max_d = cmds
         if p_id == -1: # 부모가 없는 root일 때
-            root.append(Node(m_id, p_id, color, max_d))
+            root.append(Node(m_id, p_id, color, max_d)) 
             tree[m_id].append(root[-1])
         else: # 부모가 있을 때
             if len(tree[p_id]) == 1: # 부모의 자식이 아직 없는 상태라면
@@ -89,7 +93,7 @@ for _ in range(q):
                             break
                         now = tree[now.p_id][0]
                         depth += 1 
-                    # 새로운 node 추가
+                        # 새로운 node 추가
                     new = Node(m_id, p_id, color, max_d)
                     tree[m_id].append(new)
                     tree[p_id].append(new)
